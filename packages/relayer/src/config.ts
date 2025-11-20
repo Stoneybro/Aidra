@@ -1,17 +1,32 @@
+// src/config.ts
+import * as fs from 'fs';
+import { Config } from './types';
 
-
-// const config: Config = {
-//     zcashRpcUrl: process.env.ZCASH_RPC_URL || 'http://localhost:8232',
-//     nearRpcUrl: process.env.NEAR_RPC_URL || 'https://rpc.testnet.near.org',
-//     nearNetworkId: process.env.NEAR_NETWORK_ID || 'testnet',
-//     nearAccountId: process.env.NEAR_ACCOUNT_ID || '',
-//     nearPrivateKey: process.env.NEAR_PRIVATE_KEY || '',
-//     ethereumRpcUrl: process.env.ETHEREUM_RPC_URL || 'http://localhost:8545',
-//     ethereumPrivateKey: process.env.ETHEREUM_PRIVATE_KEY || '',
-//     contractAddress: process.env.CONTRACT_ADDRESS || '',
-//     minConfirmation: parseInt(process.env.MIN_CONFIRMATION || '6'),
-//     gasLimit: parseEther('0.01'),
-//     gasPrice: process.env.GAS_PRICE || '1000000000', // 1 Gwei
-// };
-
-
+/**
+ * Loads configuration from config.json
+ * @returns Parsed configuration object
+ */
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
+export function loadConfig(): Config {
+  try {
+    const configFile = fs.readFileSync('./config.json', 'utf-8');
+    const config: Config = JSON.parse(configFile);
+    
+    // Validate required fields
+    if (!config.zcash.bridgeAddress) {
+      throw new Error('Missing zcash.bridgeAddress in config');
+    }
+    if (!config.evm.bridgeExecutorAddress) {
+      throw new Error('Missing evm.bridgeExecutorAddress in config');
+    }
+    if (!PRIVATE_KEY) {
+      throw new Error('Missing evm.privateKey in config');
+    }
+    
+    console.log('✅ Configuration loaded successfully');
+    return config;
+  } catch (error) {
+    console.error('❌ Failed to load config.json:', error);
+    process.exit(1); // Exit if config is invalid
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "zcash": {
+    "rpcUrl": "https://testnet.lightwalletd.com:9067",
+    "rpcUser": "",
+    "rpcPassword": "",
+    "bridgeAddress": "ztestsapling1...",
+    "minConfirmations": 1,
+    "pollInterval": 30000
+  },
+  "evm": {
+    "rpcUrl": " https://base-sepolia.blockscout.com/api",
+    "bridgeExecutorAddress": "0x847616bb3606e230a38783F5f791b0f519b7f367",
+    "policyContractAddress": "0xDb883f5e39c9b3C134Cc9ea271Cd88B4D7e1E52D",
+    "privateKey": "15480aaa40aa5a672d3ffe223fbc1d4ff6be18ecac4821924d379e43287c745c.",
+    "chainId": 84532
+  },
+  "nearOneClick": {
+    "apiUrl": "https://1click.chaindefuser.com",
+    "useApiKey": false,
+    "apiKey": ""
+  },
+  "retryConfig": {
+    "maxRetries": 3,
+    "retryDelayMs": 60000
+  }
+}

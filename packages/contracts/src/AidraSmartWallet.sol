@@ -36,12 +36,7 @@ contract AidraSmartWallet is IAccount, ReentrancyGuard, Initializable {
         bytes data;
     }
 
-    /// @notice Destination addresses for cross-chain bridging
-    struct DestinationAddresses {
-        string nearAddress;
-        string solanaAddress;
-        string minaAddress;
-    }
+
 
     /*//////////////////////////////////////////////////////////////
                            STATE VARIABLES
@@ -50,9 +45,6 @@ contract AidraSmartWallet is IAccount, ReentrancyGuard, Initializable {
     /// @notice The owner address that controls this wallet.
     /// @dev Used for ECDSA signature verification.
     address public s_owner;
-
-    /// @notice Stores destination addresses for each wallet
-    DestinationAddresses public destinations;
 
     /// @notice EIP-1271 magic return value for valid signatures.
     /// @dev Returns 0x1626ba7e when signature is valid, 0xffffffff otherwise.
@@ -64,9 +56,6 @@ contract AidraSmartWallet is IAccount, ReentrancyGuard, Initializable {
     /*//////////////////////////////////////////////////////////////
                                 EVENTS
     //////////////////////////////////////////////////////////////*/
-
-    /// @notice Emitted when destinations are updated
-    event DestinationsUpdated(string nearAddress, string solanaAddress, string minaAddress);
 
     /// @notice Emitted when a single execute is performed.
     /// @param target The address that was called.
@@ -247,27 +236,6 @@ contract AidraSmartWallet is IAccount, ReentrancyGuard, Initializable {
         emit ExecutedBatch(length, totalValue);
     }
 
-    /*//////////////////////////////////////////////////////////////
-                    BRIDGE DESTINATION MANAGEMENT
-    //////////////////////////////////////////////////////////////*/
-    /**
-     * @notice Gets destination address for a specific chain
-     * @param chain The chain name ("NEAR", "SOLANA", "MINA")
-     * @return The destination address for that chain
-     */
-    function getDestination(string calldata chain) external view returns (string memory) {
-        bytes32 chainHash = keccak256(abi.encodePacked(chain));
-
-        if (chainHash == keccak256(abi.encodePacked("NEAR"))) {
-            return destinations.nearAddress;
-        } else if (chainHash == keccak256(abi.encodePacked("SOLANA"))) {
-            return destinations.solanaAddress;
-        } else if (chainHash == keccak256(abi.encodePacked("MINA"))) {
-            return destinations.minaAddress;
-        }
-
-        return "";
-    }
 
     /*//////////////////////////////////////////////////////////////
                            VIEW FUNCTIONS

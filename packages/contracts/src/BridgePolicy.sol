@@ -129,9 +129,8 @@ contract BridgePolicy {
                              CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
 
-    constructor(address _bridgeExecutor) {
-        if (_bridgeExecutor == address(0)) revert BridgePolicy__ZeroAddress();
-        bridgeExecutor = _bridgeExecutor;
+    constructor() {
+
     }
 
     /*//////////////////////////////////////////////////////////////

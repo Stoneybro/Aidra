@@ -122,11 +122,11 @@ yarn-error.log*
 next-env.d.ts
 
 # Foundry specific
-forge-std/
-lib/
-script/
+packages/contracts/forge-std/
+packages/contracts/lib/
+packages/contracts/script/
 # Deployment scripts output
-script/out/
+packages/contracts/script/out/
 # Deployment artifacts
 broadcast/
 # Deployment logs

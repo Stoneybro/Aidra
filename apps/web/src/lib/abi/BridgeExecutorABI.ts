@@ -1,0 +1,532 @@
+export const BridgeExecutorABI=[
+  {
+    "type": "constructor",
+    "inputs": [
+      {
+        "name": "_policyContract",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "_relayer",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "MIN_CONFIRMATIONS",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "completeBridge",
+    "inputs": [
+      {
+        "name": "zcashTxHash",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "externalTxId",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "confirmRefund",
+    "inputs": [
+      {
+        "name": "zcashTxHash",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "failBridge",
+    "inputs": [
+      {
+        "name": "zcashTxHash",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "reason",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getOperation",
+    "inputs": [
+      {
+        "name": "zcashTxHash",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct BridgeExecutor.BridgeOperation",
+        "components": [
+          {
+            "name": "aaWallet",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "amount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "zcashTxHash",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "destinationChain",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "recipientAddress",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "zcashRefundAddress",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "status",
+            "type": "uint8",
+            "internalType": "enum BridgeExecutor.OperationStatus"
+          },
+          {
+            "name": "timestamp",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "requiresGuardians",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "initiateBridge",
+    "inputs": [
+      {
+        "name": "aaWallet",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "destinationChain",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "zcashTxHash",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "recipientAddress",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "zcashRefundAddress",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "proof",
+        "type": "bytes",
+        "internalType": "bytes"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "operations",
+    "inputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "aaWallet",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "zcashTxHash",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "destinationChain",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "recipientAddress",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "zcashRefundAddress",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "status",
+        "type": "uint8",
+        "internalType": "enum BridgeExecutor.OperationStatus"
+      },
+      {
+        "name": "timestamp",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "requiresGuardians",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "owner",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "policyContract",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract BridgePolicy"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "relayer",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "requestRefund",
+    "inputs": [
+      {
+        "name": "zcashTxHash",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "retryBridge",
+    "inputs": [
+      {
+        "name": "zcashTxHash",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "updateRelayer",
+    "inputs": [
+      {
+        "name": "newRelayer",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "BridgeCompleted",
+    "inputs": [
+      {
+        "name": "zcashTxHash",
+        "type": "bytes32",
+        "indexed": true,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "aaWallet",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "externalTxId",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BridgeFailed",
+    "inputs": [
+      {
+        "name": "zcashTxHash",
+        "type": "bytes32",
+        "indexed": true,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "aaWallet",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "reason",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BridgeRequested",
+    "inputs": [
+      {
+        "name": "aaWallet",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "destinationChain",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "zcashTxHash",
+        "type": "bytes32",
+        "indexed": true,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "recipientAddress",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "name": "zcashRefundAddress",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "RefundCompleted",
+    "inputs": [
+      {
+        "name": "zcashTxHash",
+        "type": "bytes32",
+        "indexed": true,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "aaWallet",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "RefundRequested",
+    "inputs": [
+      {
+        "name": "aaWallet",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "zcashTxHash",
+        "type": "bytes32",
+        "indexed": true,
+        "internalType": "bytes32"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "RelayerUpdated",
+    "inputs": [
+      {
+        "name": "oldRelayer",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "newRelayer",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "BridgeExecutor__CannotRefundYet",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "BridgeExecutor__GuardianApprovalRequired",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "BridgeExecutor__InvalidPolicyAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "BridgeExecutor__InvalidProof",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "BridgeExecutor__InvalidRelayerAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "BridgeExecutor__InvalidStatus",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "BridgeExecutor__InvalidStatusTransition",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "BridgeExecutor__OperationAlreadyExists",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "BridgeExecutor__OperationNotFound",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "BridgeExecutor__Unauthorized",
+    "inputs": []
+  }
+] as const

@@ -14,7 +14,7 @@ export function useDeployWallet() {
 
   return useMutation({
     mutationFn: async () => {
-      // defensive checks up front
+
       if (!ownerAddress) {
         throw new Error("No connected wallet found. Please connect your wallet.");
       }

@@ -1,1 +1,3 @@
 export const AidraSmartWalletFactoryAddress="0x63106AABF02f15837320a7815fc013148BB0280a"
+export const BridgeExecutorAddress="0x847616bb3606e230a38783f5f791b0f519b7f367"
+export const BridgePolicyAddress="0xdb883f5e39c9b3c134cc9ea271cd88b4d7e1e52d"

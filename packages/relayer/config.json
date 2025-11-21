@@ -1,6 +1,6 @@
 {
   "zcash": {
-    "rpcUrl": "https://testnet.lightwalletd.com:9067",
+    "rpcUrl":"https://mainnet.lightwalletd.com:9067",
     "rpcUser": "",
     "rpcPassword": "",
     "bridgeAddress": "ztestsapling1...",

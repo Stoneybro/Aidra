@@ -1,7 +1,12 @@
-import { Button } from "@/components/ui/button";
-import Link from 'next/link';
+'use client';
 
-export default function WelcomePage() {
+import { Button } from "@/components/ui/button";
+
+interface WelcomeStepProps {
+    onNext: () => void;
+}
+
+export function WelcomeStep({ onNext }: WelcomeStepProps) {
     return (
         <div className="flex flex-col items-center justify-center p-8 text-center">
             <div className="mb-8">
@@ -10,10 +15,11 @@ export default function WelcomePage() {
                     Your secure gateway to cross-chain transactions with enhanced security policies.
                 </p>
             </div>
-            <Button asChild className="w-full max-w-xs">
-                <Link href="/wallet/policy">
-                    Get Started
-                </Link>
+            <Button
+                onClick={onNext}
+                className="w-full max-w-xs"
+            >
+                Get Started
             </Button>
         </div>
     );

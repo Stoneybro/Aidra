@@ -6,7 +6,7 @@ import { Config } from './types';
  * Loads configuration from config.json
  * @returns Parsed configuration object
  */
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const PRIVATE_KEY = process.env.ZCASH_PRIVATE_KEY;
 export function loadConfig(): Config {
   try {
     const configFile = fs.readFileSync('./config.json', 'utf-8');

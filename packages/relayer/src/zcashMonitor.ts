@@ -1,9 +1,11 @@
+
 import axios from 'axios';
 import { Config, ZcashDeposit, ParsedMemo } from './types';
 import { isDepositProcessed, logMessage } from './stateManager';
+import { sendTransparentZec } from './zcashSigner';
 
 /**
- * Makes RPC call to Zcash node
+ * Makes RPC call to Zcash node (GetBlock)
  */
 async function zcashRpc(
   config: Config,
@@ -11,6 +13,7 @@ async function zcashRpc(
   params: any[]
 ): Promise<any> {
   try {
+    // GetBlock uses access token in URL, no auth needed
     const response = await axios.post(
       config.zcash.rpcUrl,
       {
@@ -18,25 +21,20 @@ async function zcashRpc(
         id: 'relayer',
         method: method,
         params: params
-      },
-      {
-        auth: {
-          username: config.zcash.rpcUser,
-          password: config.zcash.rpcPassword
-        }
       }
+      // ❌ No auth needed - token is in URL!
     );
     
     return response.data.result;
   } catch (error: any) {
-    console.error(`❌ Zcash RPC error (${method}):`, error.message);
+    console.error(`❌ Zcash RPC error (${method}):`, error.response?.data || error.message);
     throw error;
   }
 }
 
 /**
  * Parses memo string into components
- * Format: "0xAABB...|NEAR|alice.near|ztestsapling1..."
+ * Format: "0xAABB...|NEAR|alice.near|t1refund..."
  */
 export function parseMemo(memo: string): ParsedMemo | null {
   try {
@@ -60,33 +58,36 @@ export function parseMemo(memo: string): ParsedMemo | null {
 }
 
 /**
- * Checks for new Zcash deposits
+ * Checks for new Zcash deposits (transparent)
  */
 export async function checkZcashDeposits(config: Config): Promise<ZcashDeposit[]> {
   try {
-    const deposits = await zcashRpc(config, 'z_listreceivedbyaddress', [
-      config.zcash.bridgeAddress,
-      config.zcash.minConfirmations
+    // For TRANSPARENT addresses, use listreceivedbyaddress
+    const transactions = await zcashRpc(config, 'listreceivedbyaddress', [
+      config.zcash.minConfirmations,
+      false, // include empty
+      true   // include watchonly
     ]);
     
     const newDeposits: ZcashDeposit[] = [];
     
-    for (const deposit of deposits) {
-      const txid = deposit.txid;
+    for (const tx of transactions) {
+      // Only process deposits to our bridge address
+      if (tx.address !== config.zcash.bridgeAddress) continue;
       
-      // Check DB if already processed
-      if (await isDepositProcessed(txid)) {
+      // Get transaction details
+      const txDetails = await zcashRpc(config, 'gettransaction', [tx.txid]);
+      
+      // Check if already processed
+      if (await isDepositProcessed(tx.txid)) {
         continue;
       }
       
-      const memo = deposit.memo ? 
-        Buffer.from(deposit.memo, 'hex').toString('utf-8') : '';
-      
       newDeposits.push({
-        txid: txid,
-        amount: Math.floor(deposit.amount * 100000000),
-        confirmations: deposit.confirmations,
-        memo: memo
+        txid: tx.txid,
+        amount: Math.floor(tx.amount * 100000000), // Convert to zatoshis
+        confirmations: tx.confirmations,
+        memo: '' // Transparent txs don't have memos in standard format
       });
     }
     
@@ -94,17 +95,19 @@ export async function checkZcashDeposits(config: Config): Promise<ZcashDeposit[]
       console.log(`🔍 Found ${newDeposits.length} new deposit(s)`);
       await logMessage('info', `Found ${newDeposits.length} new deposits`);
     }
+    console.log("List of new deposits:", newDeposits);
+    
     
     return newDeposits;
   } catch (error: any) {
+    console.error('❌ Error checking deposits:', error.message);
     await logMessage('error', 'Error checking Zcash deposits', { error: error.message });
     return [];
   }
 }
 
 /**
- * Sends ZEC from bridge custody to destination address
- * Used for forwarding to 1Click or refunds
+ * Sends ZEC using Maya Protocol signing
  */
 export async function sendZcash(
   config: Config,
@@ -113,39 +116,8 @@ export async function sendZcash(
   memo?: string
 ): Promise<string> {
   try {
-    // Convert zatoshis to ZEC
-    const amountZec = amount / 100000000;
-    
-    // Prepare z_sendmany parameters
-    const outputs = [{
-      address: toAddress,
-      amount: amountZec,
-      ...(memo && { memo: Buffer.from(memo).toString('hex') })
-    }];
-    
-    // Execute send
-    const opid = await zcashRpc(config, 'z_sendmany', [
-      config.zcash.bridgeAddress, // from our custody
-      outputs,
-      1, // minconf
-      0.0001 // fee
-    ]);
-    
-    console.log(`📤 Sent ${amountZec} ZEC to ${toAddress}, opid: ${opid}`);
-    
-    // Wait for operation to complete
-    let status = await zcashRpc(config, 'z_getoperationstatus', [[opid]]);
-    
-    while (status[0].status === 'executing') {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      status = await zcashRpc(config, 'z_getoperationstatus', [[opid]]);
-    }
-    
-    if (status[0].status === 'success') {
-      return status[0].result.txid;
-    } else {
-      throw new Error(`Send failed: ${status[0].error.message}`);
-    }
+    // Use Maya Protocol client-side signing
+    return await sendTransparentZec(config, toAddress, amount, memo);
   } catch (error: any) {
     console.error('❌ Failed to send ZEC:', error.message);
     throw error;

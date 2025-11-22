@@ -8,12 +8,12 @@ import {
 import { privateKeyToAccount } from 'viem/accounts';
 import { Config, ZcashDeposit, ParsedMemo } from './types';
 import { markDepositProcessed, logMessage } from './stateManager';
-
+import 'dotenv/config';
 const BRIDGE_EXECUTOR_ABI = parseAbi([
   'function initiateBridge(address aaWallet, string calldata destinationChain, uint256 amount, bytes32 zcashTxHash, string calldata recipientAddress, string calldata zcashRefundAddress, bytes calldata proof) external'
 ]);
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
+
 /**
  * Submits a Zcash deposit to EVM BridgeExecutor
  */
@@ -30,14 +30,14 @@ export async function submitBridgeToEVM(
     console.log(`   Recipient: ${parsed.recipientAddress}`);
     
     // Create clients
-    const account = PRIVATE_KEY as `0x${string}`;
+    const account = privateKeyToAccount(process.env.EVM_PRIVATE_KEY as `0x${string}`);
     
     const walletClient = createWalletClient({
       account,
       chain: {
         id: config.evm.chainId,
-        name: 'Sepolia',
-        network: 'sepolia',
+        name: 'baseSepolia',
+        network: 'baseSepolia',
         nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
         rpcUrls: {
           default: { http: [config.evm.rpcUrl] },

@@ -1,12 +1,12 @@
 // src/config.ts
 import * as fs from 'fs';
 import { Config } from './types';
+import 'dotenv/config';
 
 /**
  * Loads configuration from config.json
  * @returns Parsed configuration object
  */
-const PRIVATE_KEY = process.env.ZCASH_PRIVATE_KEY;
 export function loadConfig(): Config {
   try {
     const configFile = fs.readFileSync('./config.json', 'utf-8');
@@ -19,8 +19,11 @@ export function loadConfig(): Config {
     if (!config.evm.bridgeExecutorAddress) {
       throw new Error('Missing evm.bridgeExecutorAddress in config');
     }
-    if (!PRIVATE_KEY) {
+    if (!process.env.EVM_PRIVATE_KEY) {
       throw new Error('Missing evm.privateKey in config');
+    }
+    if (!process.env.ZCASH_PRIVATE_KEY) {
+      throw new Error('Missing zcash.privateKey in config');
     }
     
     console.log('✅ Configuration loaded successfully');

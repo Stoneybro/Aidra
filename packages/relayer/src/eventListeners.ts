@@ -14,7 +14,7 @@ import { Config } from './types';
 import { logMessage, upsertPendingSwap, getPendingSwap } from './stateManager';
 import { executeNearBridge } from './nearHandler';
 import { sendZcash } from './zcashMonitor';
-
+import 'dotenv/config';
 /**
  * Bridge Executor ABI (only events and functions we need)
  */
@@ -25,12 +25,12 @@ const BRIDGE_EXECUTOR_ABI = parseAbi([
     'function failBridge(bytes32 zcashTxHash, string calldata reason) external',
     'function confirmRefund(bytes32 zcashTxHash) external'
 ]);
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const PRIVATE_KEY = process.env.EVM_PRIVATE_KEY;
 /**
  * Creates viem clients for reading and writing to EVM
  */
 function createClients(config: Config) {
-    const account = PRIVATE_KEY as `0x${string}`
+    const account = privateKeyToAccount(PRIVATE_KEY as `0x${string}`);
 
     // Public client for reading/watching events
     const publicClient = createPublicClient({

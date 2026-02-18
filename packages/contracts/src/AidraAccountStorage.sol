@@ -28,12 +28,12 @@ struct AccountStorage{
     uint64 initialized;
     bool initializinng;
     mapping (bytes4 selector => ExecutionStorage) executionStorage;
-    mapping (ValidationLookupKey lookupKey => ValidationStorage) validationstorage;
+    mapping (ValidationLookupKey lookupKey => ValidationStorage) validationStorage;
     mapping(bytes4 => uint256) supportedIfaces;
 }
 
 function getAccountStorage() pure  returns (AccountStorage storage s) {
-    bytes32 accountS;
+    bytes32 accountS=_ACCOUNT_STORAGE_SLOT;
     assembly {
         s.slot :=accountS
     }
